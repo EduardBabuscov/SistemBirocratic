@@ -2,7 +2,6 @@ package sistem;
 
 public class Ghiseu {
 
-	public boolean IsOpen(){
 		
 		return true;
 	}
@@ -17,7 +16,6 @@ public class Ghiseu {
 		
 	}
 	
-	public int GetNumarClienti(){
 		
 		return 0;
 	}
