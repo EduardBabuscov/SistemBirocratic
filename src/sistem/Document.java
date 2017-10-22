@@ -14,12 +14,12 @@ public class Document {
 		_documenteNecesare = documenteNecesare;
 	}
 	
-	public List<Document> GetDocumenteNecesare(){
+	public List<Document> getDocumenteNecesare(){
 		
 		return new ArrayList<Document>(_documenteNecesare);
 	}
 	
-	public String GetType(){
+	public String getType(){
 		
 		return _type;
 	}

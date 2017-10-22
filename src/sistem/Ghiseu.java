@@ -2,7 +2,7 @@ package sistem;
 
 public class Ghiseu {
 
-	public boolean IsOpen(){
+	public boolean isOpen(){
 		
 		return true;
 	}

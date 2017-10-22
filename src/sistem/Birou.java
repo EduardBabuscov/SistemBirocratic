@@ -13,13 +13,13 @@ public class Birou {
 		_documente = documente;
 	}
 	
-	public boolean PoateEmiteDocument(Document document){
+	public boolean poateEmiteDocument(Document document){
 		
 		//daca contine un doc de acelasi tip
 		return true;
 	}
 	
-	public Ghiseu GetGhiseuOptim(){
+	public Ghiseu getGhiseuOptim(){
 		
 		return new Ghiseu();
 	}
