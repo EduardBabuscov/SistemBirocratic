@@ -16,4 +16,9 @@ public class Ghiseu {
 		
 		
 	}
+	
+	public int GetNumarClienti(){
+		
+		return 0;
+	}
 }

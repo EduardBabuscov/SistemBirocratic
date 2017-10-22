@@ -1,7 +1,10 @@
 package sistem;
 
+import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Document {
 
@@ -23,4 +26,5 @@ public class Document {
 		
 		return _type;
 	}
+
 }
