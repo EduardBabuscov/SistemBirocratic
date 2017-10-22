@@ -17,10 +17,12 @@ public class Document {
 		_documenteNecesare = documenteNecesare;
 	}
 	
+	public List<Document> getDocumenteNecesare(){
 		
 		return new ArrayList<Document>(_documenteNecesare);
 	}
 	
+	public String getType(){
 		
 		return _type;
 	}

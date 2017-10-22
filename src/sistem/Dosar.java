@@ -24,6 +24,7 @@ public class Dosar {
 		}
 	}
 	
+	public List<Document> getAllDocuments(){
 		
 		return new ArrayList<Document>(_documenteNecesare.values());
 	}
@@ -36,6 +37,8 @@ public class Dosar {
 		}else{
 			
 			Map<String,Document> result = new HashMap<String,Document>();
+			result.put(act.getType(),act);
+			for(Document document:act.getDocumenteNecesare()){	
 					result.putAll(getAllDocuments(document));
 			}
 			
