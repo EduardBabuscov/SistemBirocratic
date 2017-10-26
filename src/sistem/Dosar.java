@@ -20,7 +20,10 @@ public class Dosar {
 		_acteObtinute = new ArrayList<String>();
 		_documenteNecesare = new HashMap<String,Document>();
 		for(Document document:acteNecesare){
-			_documenteNecesare.putAll(getAllDocuments(document));
+			if(!_documenteNecesare.containsKey(document.getType())){
+				_documenteNecesare.putAll(getAllDocuments(document));
+			}
+			
 		}
 	}
 	
@@ -39,7 +42,10 @@ public class Dosar {
 			Map<String,Document> result = new HashMap<String,Document>();
 			result.put(act.getType(),act);
 			for(Document document:act.getDocumenteNecesare()){	
+				if(!_documenteNecesare.containsKey(document.getType())){
 					result.putAll(getAllDocuments(document));
+				}
+					
 			}
 			
 			return result;
