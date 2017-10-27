@@ -15,12 +15,32 @@ public class Birou {
 	
 	public boolean poateEmiteDocument(Document document){
 		
-		//daca contine un doc de acelasi tip
-		return true;
+		for(Document doc : _documente){
+			if(doc.getType().equals(document.getType())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
-	public Ghiseu getGhiseuOptim(){
+	public Ghiseu getGhiseuOptim(Document document){
 		
-		return new Ghiseu();
+		if(!poateEmiteDocument(document)){
+			return null;
+		}
+		
+		Ghiseu tmp=null;
+		for(Ghiseu ghiseu : _ghiseuri){			
+			if(tmp!=null){
+				if(ghiseu.getNumarClienti()<tmp.getNumarClienti()){
+					tmp = ghiseu;
+				}
+			}
+			else{
+				tmp=ghiseu;
+			}
+				
+		}
+		return tmp;
 	}
 }
