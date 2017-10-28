@@ -6,10 +6,20 @@ public class Institutie {
 
 	private List<Birou> _birouri;
 	
-	public Ghiseu getGhiseuPentruDocument(Document document){
-		
-		//cauta in birouri biroul la care se emite documentul si are cel mai bun ghiseu
-		//sau random si gata
-		return new Ghiseu();
+	//cauta in birouri biroul la care se emite documentul si are cel mai bun ghiseu
+	public synchronized Ghiseu getGhiseuPentruDocument(Document document){
+		Ghiseu result=null,tmp;
+		for(Birou birou :_birouri){
+			if(birou.poateEmiteDocument(document)){
+				tmp = birou.getGhiseuOptim();
+				if(tmp !=null ){
+					if(result==null || ((tmp.getNumarClienti()>result.getNumarClienti()))){
+						result = tmp;
+					}
+				}			
+			}
+		}
+		return result;
+
 	}
 }
