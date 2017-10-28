@@ -11,7 +11,7 @@ public class Institutie {
 		Ghiseu result=null,tmp;
 		for(Birou birou :_birouri){
 			if(birou.poateEmiteDocument(document)){
-				tmp = birou.getGhiseuOptim(document);
+				tmp = birou.getGhiseuOptim();
 				if(tmp !=null ){
 					if(result==null || ((tmp.getNumarClienti()>result.getNumarClienti()))){
 						result = tmp;

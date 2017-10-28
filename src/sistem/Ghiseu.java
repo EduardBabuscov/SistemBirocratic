@@ -1,79 +1,36 @@
 package sistem;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
+import java.util.Queue;
 
 public class Ghiseu {
+	private Queue<Client> _clienti;
 
-	private List<Client> _clienti;
-	private boolean _isOpen;
-	private Semaphore lock = new Semaphore(1,true);
-	private int _readersOfClients=0;
-	
-	public Ghiseu(){
-		_clienti = new ArrayList<Client>();
-		_isOpen = true;
-	}
-	
 	public boolean isOpen(){
 		
-		return _isOpen;
+		return true;
 	}
 	
-	public void addClient(Client client){
-		acquireLock();
-		if(_isOpen)
-		{
-			_clienti.add(client);
-		}
-		releaseLock();
+	public synchronized void addClient(Client client){
+		
+		
 	}
-	
-	public void removeClient(Client client){
-		acquireLock();
-		_clienti.remove(client);
-		releaseLock();
-	}
-	
 	
 	public synchronized void doWork(){//poate nu trebuie synchro, depinde...
+		
 		
 	}
 	
 	public int getNumarClienti(){
 		
-		acquireLockBeforeRead();
-		int tmp = _clienti.size();
-		releaseLockAfterRead();
-		return tmp;
+		return 0;
 	}
-	
-	private synchronized void releaseLock(){
-		lock.release();
+
+	// TODO: We probably don't need this
+	public Queue<Client> getClienti() {
+		return _clienti;
 	}
-	
-	private synchronized void acquireLock(){
-		try {
-			lock.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private synchronized void releaseLockAfterRead(){
-		
-		_readersOfClients--;
-		if(_readersOfClients==0){
-			 releaseLock();
-		}
-	}
-	
-	private synchronized void acquireLockBeforeRead(){
-		_readersOfClients++;
-		if(_readersOfClients==1){
-			acquireLock();
-		}
+
+	public void setClienti(Queue<Client> _clienti) {
+		this._clienti = _clienti;
 	}
 }
