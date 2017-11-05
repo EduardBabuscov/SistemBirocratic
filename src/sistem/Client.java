@@ -12,6 +12,11 @@ public class Client implements Runnable{
         id = number;
         this.institutie = institutie;
     }
+    
+    public int getId(){
+    	
+    	return id;
+    }
 
     @Override
     public void run() {

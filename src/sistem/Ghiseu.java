@@ -42,6 +42,15 @@ public class Ghiseu {
         _clienti.remove(client);
         releaseLock();
     }
+    
+    private boolean checkIfTurn(Client client){
+    
+    	acquireLockBeforeRead();
+    	Client tmp = _clienti.get(0);
+    	releaseLockAfterRead();
+    	
+    	return tmp.getId()==client.getId();
+    }
 
 
     public boolean doWork(Client client,Document act) {
@@ -51,6 +60,12 @@ public class Ghiseu {
     	}
     	
         addClient(client);
+    	
+    	while(!checkIfTurn(client)){
+    		
+    	}
+    	System.out.println("Clientului " + client.getId() + " i-a venit randul pt actul " + act.getType());
+    	
         try {
             Thread.sleep(1000);//sleep pentru a simula munca ghiseului
         } catch (InterruptedException e) {
