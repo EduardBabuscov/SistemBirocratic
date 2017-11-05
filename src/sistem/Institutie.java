@@ -34,6 +34,7 @@ public class Institutie {
                 }
             }
         }
+        
         return result;
 
     }

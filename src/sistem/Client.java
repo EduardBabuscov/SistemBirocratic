@@ -3,7 +3,7 @@ package sistem;
 import java.util.List;
 
 public class Client implements Runnable{
-    private Dosar dosar;
+    public Dosar dosar;
     private int id;
     private Institutie institutie;
 
@@ -33,13 +33,27 @@ public class Client implements Runnable{
         
         Document act = null;
         while((act=dosar.getNextObtainableDocument())!=null){
-         	if(institutie.getGhiseuPentruDocument(act).doWork(this)){
-         		dosar.markDocumentAsObtained(act);
+         	if(institutie.getGhiseuPentruDocument(act).doWork(this,act)){
+
+         		 System.out.println("Clientul " + id + " a obtinut actul " + act.getType());
+         	}
+         	else{
+         		
+         		 System.out.println("Clientul " + id + " nu a putut obtine actul " + act.getType());
          	}
         	
-            System.out.println("Clientul " + id + " a obtinut actul " + act.getType());
+           
         }
-
+        
+        if(dosar.noMoreDocumentsToObtain()){
+        	
+        	System.out.println("Clientul " + id + " a reusit sa obtina toate actele.");
+        }
+        else{
+        	
+        	System.out.println("Structura de acte nu este valida pentru clientul " + id);
+        }
+        
 
         //TODO deci fa sa fie bine ca sa nu fie rau
         //TODO in dosar fa o metoda de compute all needed docs

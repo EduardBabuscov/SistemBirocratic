@@ -55,6 +55,17 @@ public class Dosar {
     	return null;
     }
     
+    public boolean checkIfDocumentHasAllRequired(Document document){
+    	
+    	for(Document doc:document.getDocumenteNecesare()){
+    		if(!checkIfDocumentIsOwned(doc)){
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
     private boolean checkIfDocumentIsOwned(Document document){
     	
     	for(Document doc:_acteObtinute){    		
@@ -81,6 +92,11 @@ public class Dosar {
 
     public List<Document> getAllDocuments(){
         return new ArrayList<Document>(_documenteNecesare.values());
+    }
+    
+    public boolean noMoreDocumentsToObtain(){
+    	
+    	return _documenteNecesare.size()==0;
     }
 
 

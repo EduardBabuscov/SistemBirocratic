@@ -1,5 +1,6 @@
 package sistem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -8,13 +9,19 @@ public class Ghiseu {
 
     private List<Client> _clienti;
     private boolean _isOpen;
-    private Semaphore lock = new Semaphore(1,true);
+    private Semaphore _lock = new Semaphore(1,true);
     private int _readersOfClients=0;
+    private List<String> _documentTypes;
 
-    public Ghiseu(){
+    public Ghiseu(List<String> documentTypes){
         _clienti = new LinkedList<>();
         _isOpen = true;
+        _documentTypes = new ArrayList<>(documentTypes);
     }
+    
+/*    public void replaceDocumentTypes(List<String> docs){
+    	_documentTypes = new ArrayList<>(docs);
+    }*/
 
     public boolean isOpen(){
 
@@ -37,16 +44,23 @@ public class Ghiseu {
     }
 
 
-    public boolean doWork(Client client) {//poate nu trebuie synchro, depinde...
-        //eu zic ca nu trebuie sa fie synchronized ca altfel stiva aia va fi inutila
+    public boolean doWork(Client client,Document act) {
+
+    	if(!_documentTypes.contains(act.getType()) || !client.dosar.checkIfDocumentHasAllRequired(act)){
+    		return false;
+    	}
+    	
         addClient(client);
         try {
-            Thread.sleep(1000);//sleep pentru a simula munca biroului
+            Thread.sleep(1000);//sleep pentru a simula munca ghiseului
         } catch (InterruptedException e) {
             e.printStackTrace();
+            removeClient(client);
             return false;
         }
-        removeClient(_clienti.get(0));
+        
+        client.dosar.markDocumentAsObtained(act);
+        removeClient(client);
         return true;
     }
 
@@ -59,12 +73,12 @@ public class Ghiseu {
     }
 
     private synchronized void releaseLock(){
-        lock.release();
+    	_lock.release();
     }
 
     private synchronized void acquireLock(){
         try {
-            lock.acquire();
+        	_lock.acquire();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -74,11 +74,11 @@ f -> d(-> e(->g j)) h
     }
 
     private static void initBirouri() {
-        institutie.addBirou(new Birou(Arrays.asList(new Ghiseu(), new Ghiseu()),
+        institutie.addBirou(new Birou(2,
                 Arrays.asList(documents[0], documents[1], documents[2])));
-        institutie.addBirou(new Birou(Arrays.asList(new Ghiseu()),
+        institutie.addBirou(new Birou(1,
                 Arrays.asList(documents[3], documents[4], documents[5])));
-        institutie.addBirou(new Birou(Arrays.asList(new Ghiseu(), new Ghiseu(), new Ghiseu()),
+        institutie.addBirou(new Birou(3,
                 Arrays.asList(documents[6], documents[7], documents[8])));
     }
 }
