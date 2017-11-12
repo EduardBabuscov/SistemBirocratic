@@ -15,8 +15,9 @@ public class Main {
         institutie = new Institutie();
         initDocumente();
         initBirouri();
-        try {
-            while (number<10) {
+        institutie.startController();
+        while (number<100) {
+            try {
                 int random = new Random().nextInt(6);
                 Thread thread = new Thread(new Client(number, new Dosar(documents[random]), institutie));
 
@@ -24,11 +25,13 @@ public class Main {
                         documents[random].getType());
                 thread.start();
                 number++;
+
                 Thread.sleep(new Random().nextInt(7000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
         }
+
     }
 /*
 a -> g
@@ -75,10 +78,10 @@ f -> d(-> e(->g j)) h
 
     private static void initBirouri() {
         institutie.addBirou(new Birou(2,
-                Arrays.asList(documents[0], documents[1], documents[2])));
+                Arrays.asList(documents[0], documents[1], documents[2]),"birou1"));
         institutie.addBirou(new Birou(1,
-                Arrays.asList(documents[3], documents[4], documents[5])));
+                Arrays.asList(documents[3], documents[4], documents[5]),"birou2"));
         institutie.addBirou(new Birou(3,
-                Arrays.asList(documents[6], documents[7], documents[8])));
+                Arrays.asList(documents[6], documents[7], documents[8]),"birou3"));
     }
 }

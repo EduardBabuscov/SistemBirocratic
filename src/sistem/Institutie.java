@@ -2,15 +2,27 @@ package sistem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Institutie {
 
     private List<Birou> _birouri;
-    private List<Document> documente;
+    private List<Document> _documente;
+    private Thread _thread;
 
     public Institutie() {
         _birouri = new ArrayList<>();
-        documente = new ArrayList<>();
+        _documente = new ArrayList<>();
+        _thread = new Thread(new GhiseuController(this));
+    }
+    
+    public synchronized void startController(){
+    	_thread.start();
+    }
+    
+    public synchronized void acceptRandomSchedule(){
+    	
+    	_birouri.get(new Random().nextInt(_birouri.size())).acceptRandomSchedule();
     }
 
     public void addBirou(Birou birou) {
@@ -18,7 +30,7 @@ public class Institutie {
     }
 
     public void addDocument(Document document) {
-        documente.add(document);
+    	_documente.add(document);
     }
 
     //cauta in birouri biroul la care se emite documentul si are cel mai bun ghiseu
@@ -34,7 +46,6 @@ public class Institutie {
                 }
             }
         }
-        
         return result;
 
     }

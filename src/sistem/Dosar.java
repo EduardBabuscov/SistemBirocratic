@@ -7,19 +7,12 @@ import java.util.Map;
 
 public class Dosar {
 
-    //Ar fi nevoie de clasa asta peste Lista de documente (e nevoie de cineva care sa scoata
-    //documentele necesare din fiecare document si sa se asigure ca sunt adaugate o singura
-    //data in lista de acte.. (Nu e job-ul clasei client, poate al institutiei, dar tot zic
-    // ca e mai ok clasa noua)
-
     private List<Document> _acteObtinute;
     private Map<String,Document> _documenteNecesare;
-    //private Document _documentNecesar;
 
     public Dosar(Document actNecesar) {
         _acteObtinute = new ArrayList<Document>();
         _documenteNecesare = new HashMap<>();
-        //_documenteNecesare.put(actNecesar.getType(),_documentNecesar);
         flattenAndAddDocuments(actNecesar);
     }
 
@@ -117,16 +110,5 @@ public class Dosar {
         }
 
     }
-
-	/*	private boolean ContainsType(String type,List<Document> acte){
-
-	for(Document document:acte){
-		if(document.GetType().equals(type)){
-			return true;
-		}
-	}
-
-	return false;
-}*/
 
 }

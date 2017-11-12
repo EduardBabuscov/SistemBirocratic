@@ -2,19 +2,28 @@ package sistem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Birou {
 
     private List<Ghiseu> _ghiseuri;
     private List<Document> _documente;
     private int _numarGhisee;
+    private String _numeBirou;
 
-    public Birou(int numarGhisee,List<Document> documente){
+    public Birou(int numarGhisee,List<Document> documente,String numeBirou){
 
     	_ghiseuri = new ArrayList<>();
         _documente = documente;
         _numarGhisee = numarGhisee;
+        _numeBirou = numeBirou;
         createGhisee();
+    }
+    
+    public synchronized void acceptRandomSchedule(){
+    	
+    	_ghiseuri.get(new Random().nextInt(_ghiseuri.size())).changeState();
+
     }
     
     private void createGhisee(){
@@ -25,7 +34,7 @@ public class Birou {
     	}
     	
     	for(int i=0;i<_numarGhisee;i++){
-    		_ghiseuri.add(new Ghiseu(types));
+    		_ghiseuri.add(new Ghiseu(types,i+_numeBirou));
     	}
     }
 
@@ -48,12 +57,13 @@ public class Birou {
         Ghiseu tmp=null;
         for(Ghiseu ghiseu : _ghiseuri){
             if(tmp!=null){
-                if(ghiseu.getNumarClienti()<tmp.getNumarClienti()){
+                if((ghiseu.getNumarClienti()<tmp.getNumarClienti()) && ghiseu.isOpen()){
                     tmp = ghiseu;
                 }
             }
             else{
                 tmp=ghiseu;
+                
             }
 
         }

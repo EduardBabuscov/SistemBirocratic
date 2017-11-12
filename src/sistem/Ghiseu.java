@@ -3,115 +3,94 @@ package sistem;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 public class Ghiseu {
 
     private List<Client> _clienti;
     private boolean _isOpen;
-    private Semaphore _lock = new Semaphore(1,true);
-    private int _readersOfClients=0;
     private List<String> _documentTypes;
+    private String _numeGhiseu;
 
-    public Ghiseu(List<String> documentTypes){
+    public Ghiseu(List<String> documentTypes,String numeGhiseu){
         _clienti = new LinkedList<>();
         _isOpen = true;
         _documentTypes = new ArrayList<>(documentTypes);
+        _numeGhiseu = numeGhiseu;
     }
     
-/*    public void replaceDocumentTypes(List<String> docs){
-    	_documentTypes = new ArrayList<>(docs);
-    }*/
 
-    public boolean isOpen(){
-
+    public synchronized boolean isOpen(){
         return _isOpen;
     }
-
-    public void addClient(Client client){
-        acquireLock();
-        if(_isOpen)
-        {
-            _clienti.add(client);
-        }
-        releaseLock();
-    }
-
-    public void removeClient(Client client){
-        acquireLock();
-        _clienti.remove(client);
-        releaseLock();
-    }
     
-    private boolean checkIfTurn(Client client){
     
-    	acquireLockBeforeRead();
-    	Client tmp = _clienti.get(0);
-    	releaseLockAfterRead();
+    public synchronized void changeState(){
+    	System.out.println("Se schimba starea la ghiseul "+ _numeGhiseu);
     	
-    	return tmp.getId()==client.getId();
+    	_isOpen =!_isOpen;
+    	if(_isOpen){
+    		System.out.println("Ghiseul "+ _numeGhiseu+ " este deschis");
+    	}else{
+    		System.out.println("Ghiseul "+ _numeGhiseu+ " este inchis");
+    	}	
+		
+    }
+    
+
+    public synchronized void addClient(Client client){     
+        //System.out.println("add" + _clienti.size());
+         _clienti.add(client);
+    }
+
+    public synchronized void removeClient(Client client){
+        _clienti.remove(client);
+        //System.out.println("remove" + _clienti.size());
     }
 
 
-    public boolean doWork(Client client,Document act) {
+    public boolean doWork(Client client,Document act) throws Exception {
 
-    	if(!_documentTypes.contains(act.getType()) || !client.dosar.checkIfDocumentHasAllRequired(act)){
+    	if(!_isOpen || !_documentTypes.contains(act.getType()) || !client.dosar.checkIfDocumentHasAllRequired(act)){
     		return false;
     	}
     	
         addClient(client);
-    	
-    	while(!checkIfTurn(client)){
+    	if(!isOpen())
+    	    throw new Exception();
+
+    	if(!_isOpen){
+    		removeClient(client);
+    		System.out.println("Clientul" + client.getId() + " nu a putut obtine actul " + act.getType() + " pt ca s-a inchis ghiseul "+_numeGhiseu);
+    		return false;
     		
     	}
-    	System.out.println("Clientului " + client.getId() + " i-a venit randul pt actul " + act.getType());
-    	
-        try {
-            Thread.sleep(1000);//sleep pentru a simula munca ghiseului
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        synchronized (this) {
+        	if(_clienti.get(0).getId()!=client.getId()){
+        		Thread.currentThread().wait();
+        	}
+    	System.out.println("Clientului " + client.getId() + " i-a venit randul pt actul " + act.getType() + " la ghiseul "+_numeGhiseu);
+
+            try {
+                Thread.sleep(1000);//sleep pentru a simula munca ghiseului
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                removeClient(client);
+                return false;
+            }
+
+            
+            client.dosar.markDocumentAsObtained(act);  
             removeClient(client);
-            return false;
+            if(_clienti.size()>0){
+            	_clienti.get(0).notify();
+            }
+            
         }
         
-        client.dosar.markDocumentAsObtained(act);
-        removeClient(client);
         return true;
     }
 
-    public int getNumarClienti(){
-
-        acquireLockBeforeRead();
-        int tmp = _clienti.size();
-        releaseLockAfterRead();
-        return tmp;
-    }
-
-    private synchronized void releaseLock(){
-    	_lock.release();
-    }
-
-    private synchronized void acquireLock(){
-        try {
-        	_lock.acquire();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    private synchronized void releaseLockAfterRead(){
-
-        _readersOfClients--;
-        if(_readersOfClients==0){
-            releaseLock();
-        }
-    }
-
-    private synchronized void acquireLockBeforeRead(){
-        _readersOfClients++;
-        if(_readersOfClients==1){
-            acquireLock();
-        }
+    public synchronized int getNumarClienti(){
+        return _clienti.size();
     }
 }
