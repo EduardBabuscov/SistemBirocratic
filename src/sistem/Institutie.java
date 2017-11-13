@@ -8,16 +8,21 @@ public class Institutie {
 
     private List<Birou> _birouri;
     private List<Document> _documente;
-    private Thread _thread;
+    //private Thread _thread;
+    private GhiseuController controller;
 
     public Institutie() {
         _birouri = new ArrayList<>();
         _documente = new ArrayList<>();
-        _thread = new Thread(new GhiseuController(this));
+        controller = new GhiseuController(this);
     }
     
     public synchronized void startController(){
-    	_thread.start();
+    	controller.start();
+    }
+    
+    public synchronized void turnOffController(){
+    	controller.turnOff();
     }
     
     public synchronized void acceptRandomSchedule(){

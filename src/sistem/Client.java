@@ -39,7 +39,7 @@ public class Client implements Runnable{
                         notOk = false;
                     } else {
 
-                        //System.out.println("Clientul " + id + " nu a putut obtine actul " + act.getType());
+                    	System.out.println("Clientul" + id + " cauta alt birou, fiindca biroul la care statea s-a inchis.");
                     }
                 }catch (Exception e) {
                     System.out.println("Clientul" + id + " cauta alt birou, fiindca biroul la care statea s-a inchis.");

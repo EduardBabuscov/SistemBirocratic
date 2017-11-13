@@ -9,13 +9,14 @@ public class Main {
     private static Institutie institutie;
     private static Document[] documents;
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         int number = 0;
         documents = new Document[9];
         institutie = new Institutie();
         initDocumente();
         initBirouri();
         institutie.startController();
+        ArrayList<Thread> clients = new ArrayList<>();
         while (number<100) {
             try {
                 int random = new Random().nextInt(6);
@@ -26,11 +27,22 @@ public class Main {
                 thread.start();
                 number++;
 
-                Thread.sleep(new Random().nextInt(7000));
+                Thread.sleep(new Random().nextInt(3000));
+                clients.add(thread);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        
+        for(Thread client : clients){
+        	try {
+				client.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        institutie.turnOffController();
 
     }
 /*
